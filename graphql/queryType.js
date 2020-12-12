@@ -1,5 +1,6 @@
 const { GraphQLObjectType, GraphQLNonNull, GraphQLInt, GraphQLList } = require('graphql')
 const models = require('../models')
+const postType = require('./types/postType')
 const userType = require('./types/userType')
 
 const queryType = new GraphQLObjectType({
@@ -24,6 +25,13 @@ const queryType = new GraphQLObjectType({
         return user;
       }
     },
+    posts: {
+      type: GraphQLList(postType),
+      resolve: async (_) => {
+        const posts = await models.Post.findAll()
+        return posts
+      }
+    }
   }
 })
 

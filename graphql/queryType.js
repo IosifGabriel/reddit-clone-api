@@ -31,6 +31,18 @@ const queryType = new GraphQLObjectType({
         const posts = await models.Post.findAll()
         return posts
       }
+    },
+    post: {
+      type:postType,
+      args: {
+        id: {
+          type: GraphQLNonNull(GraphQLInt)
+        }
+      },
+      resolve: async (_, { id }) => {
+        const post = await models.Post.findByPk(id);
+        return post;
+      }
     }
   }
 })

@@ -1,7 +1,6 @@
 {
   "name": "reddit-clone-api",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,9 +10,21 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.6",
+    "faker": "^5.1.0"
   },
   "dependencies": {
-    "express": "^4.17.1"
-  }
+    "express": "^4.17.1",
+    "sequelize": "^6.3.5",
+    "sqlite3": "^5.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gabrielmatei/reddit-clone-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gabrielmatei/reddit-clone-api/issues"
+  },
+  "homepage": "https://github.com/gabrielmatei/reddit-clone-api#readme",
+  "description": ""
 }

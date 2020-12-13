@@ -8,6 +8,7 @@ const queryType = new GraphQLObjectType({
   fields: {
     users: {
       type: GraphQLList(userType),
+      description: 'Get the list of all users',
       resolve: async (_) => {
         const users = await models.User.findAll()
         return users
@@ -15,6 +16,7 @@ const queryType = new GraphQLObjectType({
     },
     user: {
       type: userType,
+      description: 'Get a specific user by ID',
       args: {
         userId: {
           type: GraphQLNonNull(GraphQLInt)
@@ -27,13 +29,15 @@ const queryType = new GraphQLObjectType({
     },
     posts: {
       type: GraphQLList(postType),
+      description: 'Get a list of all posts',
       resolve: async (_) => {
         const posts = await models.Post.findAll()
         return posts
       }
     },
     post: {
-      type:postType,
+      type: postType,
+      description: 'Get a specific post by ID',
       args: {
         id: {
           type: GraphQLNonNull(GraphQLInt)

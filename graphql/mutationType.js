@@ -8,6 +8,7 @@ const mutationType = new GraphQLObjectType({
   fields: {
     createPost: {
       type: postType,
+      description: 'Create a post',
       args: {
         userId: {
           type: GraphQLNonNull(GraphQLInt)

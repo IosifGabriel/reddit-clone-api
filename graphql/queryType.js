@@ -9,7 +9,7 @@ const queryType = new GraphQLObjectType({
     users: {
       type: GraphQLList(userType),
       description: 'Get the list of all users',
-      resolve: async (_) => {
+      resolve: async (_, __, context) => {
         const users = await models.User.findAll()
         return users
       }

@@ -1,13 +1,12 @@
 'use strict';
 const models = require('../models');
 const faker = require('faker');
-const { random } = require('faker');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const usersQuery = await models.User.findAll();
     const threadsQuery = await models.Thread.findAll();
-    const usersPosts = new Array(20).fill(0).map(post => {
+    const usersPosts = new Array(15).fill(0).map(post => {
       const user = usersQuery[Math.floor(Math.random() * usersQuery.length)]
       const thread = threadsQuery[Math.floor(Math.random() * threadsQuery.length)]
       return {

@@ -17,6 +17,15 @@ module.exports = {
           key: 'id'
         },
       },
+      threadId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: {
+            tableName: 'Threads',
+          },
+          key: 'id'
+        },
+      },
       title: {
         type: Sequelize.STRING
       },

@@ -6,10 +6,13 @@ const { random } = require('faker');
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const usersQuery = await models.User.findAll();
-    const usersPosts = new Array(100).fill(0).map(post => {
+    const threadsQuery = await models.Thread.findAll();
+    const usersPosts = new Array(20).fill(0).map(post => {
       const user = usersQuery[Math.floor(Math.random() * usersQuery.length)]
+      const thread = threadsQuery[Math.floor(Math.random() * threadsQuery.length)]
       return {
         userId: user.id,
+        threadId: thread.id,
         media: faker.image.imageUrl(),
         title: faker.lorem.sentence(),
         body: faker.lorem.paragraph(),

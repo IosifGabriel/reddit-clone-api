@@ -1,6 +1,7 @@
 const { GraphQLObjectType, GraphQLInt, GraphQLString, GraphQLList } = require('graphql');
 const userType = require('./userType');
 const commentType = require('./commentType');
+const models = require('../../models')
 
 const postType = new GraphQLObjectType({
   name: 'Post',
@@ -21,7 +22,18 @@ const postType = new GraphQLObjectType({
     comments: {
       type: GraphQLList(commentType),
       resolve: async (parent) => {
-        return await parent.getComments();
+        const post = await models.Post.findByPk(parent.id, {
+          include: {
+            model: models.Comment,
+            where: {
+              parentId: null
+            }
+          }
+        })
+        if (post) {
+          return post.Comments
+        }
+        return []
       }
     }
   }

@@ -2,6 +2,7 @@ const { GraphQLObjectType, GraphQLNonNull, GraphQLInt, GraphQLList } = require('
 const models = require('../models')
 const postType = require('./types/postType')
 const userType = require('./types/userType')
+const threadType = require('./types/threadType')
 
 const queryType = new GraphQLObjectType({
   name: 'Query',
@@ -46,6 +47,14 @@ const queryType = new GraphQLObjectType({
       resolve: async (_, { id }) => {
         const post = await models.Post.findByPk(id);
         return post;
+      }
+    },
+    threads: {
+      type: GraphQLList(threadType),
+      description: 'Get a list of all threads',
+      resolve: async (_) => {
+        const threads = await models.Thread.findAll()
+        return threads
       }
     }
   }

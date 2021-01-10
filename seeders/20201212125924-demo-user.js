@@ -8,13 +8,13 @@ module.exports = {
     const hashedPassword = await bcrypt.hash('AdminReddit', config.SALT_ROUNDS);
 
     const mockUsers = new Array(10).fill().map(() => ({
-        username: faker.internet.userName(),
-        email: faker.internet.email(),
-        password: hashedPassword,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+      username: faker.internet.userName(),
+      email: faker.internet.email(),
+      password: hashedPassword,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     }));
-    
+
     await queryInterface.bulkInsert('Users', mockUsers, {});
   },
 

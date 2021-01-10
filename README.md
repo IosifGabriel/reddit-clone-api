@@ -4,8 +4,8 @@
 
 * [x] Migratii, seederi, modele cu relatii intre ele (sequelize)
 * [x] Query-uri cu nested fields
-* [ ] login/register
+* [x] login/register
 * [ ] 3-4 flow-uri complete
   * [ ] Listare postari(filtre) -> Listare comentarii -> Adauga comentariu/Vote
-  * [ ] Detalii Profil -> Editare profil
+  * [x] Detalii Profil -> Editare profil
   * [ ] Cauta subreddit -> Listare postari -> Adauga postare

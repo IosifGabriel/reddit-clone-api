@@ -3,6 +3,7 @@ const models = require('../models')
 const postType = require('./types/postType')
 const userType = require('./types/userType')
 const threadType = require('./types/threadType')
+const userProfileType = require('./types/userProfileType')
 
 const queryType = new GraphQLObjectType({
   name: 'Query',
@@ -55,6 +56,27 @@ const queryType = new GraphQLObjectType({
       resolve: async (_) => {
         const threads = await models.Thread.findAll()
         return threads
+      }
+    },
+    userProfile: {
+      type: userProfileType,
+      description: 'Get a specific profile by ID',
+      args: {
+        userId: {
+          type: GraphQLNonNull(GraphQLInt)
+        }
+      },
+      resolve: async (_, { userId }) => {
+        const userProfile = await models.Profile.findByPk(userId);
+        return userProfile;
+      }
+    },
+    userProfiles:{
+      type:GraphQLList(userProfileType),
+      description:'Get a list of all user profiles',
+      resolve: async(_) => {
+        const userprofiles = await models.Profile.findAll()
+        return userprofiles
       }
     }
   }

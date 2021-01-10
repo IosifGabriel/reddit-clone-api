@@ -5,6 +5,16 @@ const postInputType = require('./inputTypes/postInputType')
 const config = require('../config/appConfig');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const passwordValidator = require('password-validator');
+const IsEmail = require('validator');
+
+const passwordSchema = new passwordValidator()
+    .is().min(8)
+    .is().max(20)
+    .has().letters()
+    .has().digits()
+    .has().symbols()
+    .has().not().spaces();
 
 const mutationType = new GraphQLObjectType({
   name: 'Mutation',
@@ -59,7 +69,29 @@ const mutationType = new GraphQLObjectType({
         return null;
       },
     },
-  },
+    signup: {
+      type: GraphQLString,
+      args: {
+        email: {
+          type: GraphQLNonNull(GraphQLString),
+        },
+        reemail:{
+          type:GraphQLNonNull(GraphQLString),
+        },
+        password: {
+          type: GraphQLNonNull(GraphQLString),
+        },
+      },
+      resolve: async (_, { email, password, repassword }) => {
+        if(password == repassword)
+          return "Passwords dont correspond"
+        if(!passwordSchema.validate(password))
+          return "Password must be stronger"
+
+        return new models.User(email,password);
+      }
+    }
+  }
 });
 
 module.exports = mutationType

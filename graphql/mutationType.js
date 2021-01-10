@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const passwordValidator = require('password-validator');
 const IsEmail = require('validator');
+const userType = require('./types/userType');
 
 const passwordSchema = new passwordValidator()
     .is().min(8)
@@ -70,25 +71,41 @@ const mutationType = new GraphQLObjectType({
       },
     },
     signup: {
-      type: GraphQLString,
+      type: userType,
       args: {
+        username: {
+          type: GraphQLNonNull(GraphQLString),
+        },
         email: {
           type: GraphQLNonNull(GraphQLString),
         },
-        reemail:{
+        password:{
           type:GraphQLNonNull(GraphQLString),
         },
-        password: {
+        repassword: {
           type: GraphQLNonNull(GraphQLString),
         },
       },
-      resolve: async (_, { email, password, repassword }) => {
-        if(password == repassword)
-          return "Passwords dont correspond"
-        if(!passwordSchema.validate(password))
-          return "Password must be stronger"
+      resolve: async (_, {username, email, password, repassword }) => {
+       
+        const user = await models.User.findOne({
+          where: {
+            email,
+          }
+        });
 
-        return new models.User(email,password);
+        if(user)
+          return new Error("Email already in use")
+        if(password !== repassword)
+          return new Error("Passwords dont match")
+        if(!passwordSchema.validate(password))
+          return new Error("Think of a stronger password, 8-20chars, uppercase,lowercase, number,symbol")
+        const hashedPassword = await bcrypt.hash(password, config.SALT_ROUNDS);
+        const datenow= new Date().toDateString
+        
+        newuser = new models.User({username,hashedPassword,email,datenow,datenow});
+        const res = await newuser.save();
+        return newuser
       }
     }
   }

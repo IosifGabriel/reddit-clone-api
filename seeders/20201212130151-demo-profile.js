@@ -8,9 +8,9 @@ module.exports = {
     const usersProfile = usersQuery.map(user => ({
       userId: user.id,
       avatar: faker.internet.avatar(),
-      postkarma: faker.random.number(9999),
-      commentkarma: faker.random.number(9999),
-      age: faker.random.number(99),
+      postkarma: faker.random.number(100),
+      commentkarma: faker.random.number(100),
+      age: faker.random.number(100),
       createdAt: new Date(),
       updatedAt: new Date(),
     }));

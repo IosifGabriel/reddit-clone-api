@@ -6,7 +6,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     const usersQuery = await models.User.findAll();
     const postsQuery = await models.Post.findAll();
-    let comments = new Array(10).fill(0).map(comment => {
+    let comments = new Array(5).fill(0).map(comment => {
       const user = usersQuery[Math.floor(Math.random() * usersQuery.length)]
       const post = postsQuery[Math.floor(Math.random() * postsQuery.length)]
       return {
@@ -22,7 +22,7 @@ module.exports = {
 
     for (let i = 0; i < 3; i++) {
       const commentsQuery = await models.Comment.findAll();
-      const comments = new Array(10).fill(0).map(comment => {
+      const comments = new Array(5).fill(0).map(comment => {
         const user = usersQuery[Math.floor(Math.random() * usersQuery.length)]
         const parent = commentsQuery[Math.floor(Math.random() * commentsQuery.length)]
         return {

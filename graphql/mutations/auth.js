@@ -1,6 +1,5 @@
 const { GraphQLObjectType, GraphQLNonNull, GraphQLInt, GraphQLString } = require('graphql')
 const models = require('../../models')
-
 const config = require('../../config/appConfig');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');

@@ -1,12 +1,11 @@
-const { GraphQLInputObjectType, GraphQLString, GraphQLNonNull } = require('graphql');
+const { GraphQLInputObjectType, GraphQLString, GraphQLInt, GraphQLNonNull } = require('graphql');
 
-const postInputType = new GraphQLInputObjectType({
+module.exports = new GraphQLInputObjectType({
   name: 'PostInput',
   fields: {
+    threadId: { type: GraphQLNonNull(GraphQLInt) },
     title: { type: GraphQLNonNull(GraphQLString) },
     body: { type: GraphQLNonNull(GraphQLString) },
-    media: { type: GraphQLNonNull(GraphQLString) },
+    media: { type: GraphQLString }
   }
 })
-
-module.exports = postInputType

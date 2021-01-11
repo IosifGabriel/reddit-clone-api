@@ -13,26 +13,21 @@ module.exports = {
     type: postType,
     description: 'Create a post',
     args: {
-      userId: {
-        type: GraphQLNonNull(GraphQLInt)
-      },
-      postInput: {
+      input: {
         type: GraphQLNonNull(postInputType)
       },
     },
-    resolve: async (_, { userId, postInput }) => {
-      const user = await models.User.findByPk(userId);
-      if (!user) {
-        return null;
-      }
+    resolve: async (_, { input }, { user }) => {
+      if (!user)
+        throw new Error('not authenticated')
 
-      const post = await user.createPost(postInput);
+      const post = await user.createPost(input);
       return post;
     },
   },
   addComment: {
     type: commentType,
-    description: '',
+    description: 'Add a comment',
     args: {
       input: {
         type: GraphQLNonNull(commentInputType)

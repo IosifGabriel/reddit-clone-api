@@ -21,6 +21,7 @@ const passwordSchema = new passwordValidator()
 module.exports = {
   login: {
     type: GraphQLString,
+    description:"Login a user",
     args: {
       email: {
         type: GraphQLNonNull(GraphQLString),
@@ -78,7 +79,7 @@ module.exports = {
       await newprofile.save();
 
       const token = jwt.sign({ userId: res.id }, config.JWTSECRET);
-      
+
       return token;
     }
   }

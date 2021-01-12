@@ -8,6 +8,7 @@ const passwordValidator = require('password-validator');
 
 const IsEmail = require('validator');
 const userType = require('../types/userType');
+const signupInputType = require('../inputTypes/signupInputType');
 
 const passwordSchema = new passwordValidator()
   .is().min(8)
@@ -48,43 +49,37 @@ module.exports = {
     },
   },
   signup: {
-    type: userType,
+    type: GraphQLString,
+    description: "Signup account",
     args: {
-      username: {
-        type: GraphQLNonNull(GraphQLString),
-      },
-      email: {
-        type: GraphQLNonNull(GraphQLString),
-      },
-      password: {
-        type: GraphQLNonNull(GraphQLString),
-      },
-      repassword: {
-        type: GraphQLNonNull(GraphQLString),
-      },
+      input: {
+        type: GraphQLNonNull(signupInputType)
+      }
     },
-    resolve: async (_, { username, email, password, repassword }) => {
-
+    resolve: async (_, {input}) => {
       const user = await models.User.findOne({
         where: {
-          email,
+          email:input.email,
         }
       });
 
       if (user)
         return new Error("Email already in use")
-      if (password !== repassword)
+      if (input.password !== input.repassword)
         return new Error("Passwords dont match")
-      if (!passwordSchema.validate(password))
+      if (!passwordSchema.validate(input.password))
         return new Error("Think of a stronger password, 8-20chars, uppercase,lowercase, number,symbol")
-      const hashedPassword = await bcrypt.hash(password, config.SALT_ROUNDS);
-      const datenow = new Date().toDateString
+      const hashedPassword = await bcrypt.hash(input.password, config.SALT_ROUNDS);
 
-      newuser = new models.User({ username, hashedPassword, email, datenow, datenow });
-      newprofile = new models.Profile({ userid: newuser.id, avatar: "", age: 0, postkarma: 0, commentkarma: 0 });
-      const res = await newuser.save();
-      res = await newprofile.save();
-      return newuser
+      newuser = new models.User({ username:input.username, password:hashedPassword, email:input.email });
+      res = await newuser.save();
+
+      newprofile = new models.Profile({ userId: res.id, avatar: "", age: 0, karma: 0 });
+      await newprofile.save();
+
+      const token = jwt.sign({ userId: res.id }, config.JWTSECRET);
+      
+      return token;
     }
   }
 }

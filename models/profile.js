@@ -9,10 +9,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Profile.init({
-    postkarma: DataTypes.INTEGER,
     avatar: DataTypes.STRING,
     age: DataTypes.INTEGER,
-    commentkarma: DataTypes.INTEGER
+    karma: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'Profile',

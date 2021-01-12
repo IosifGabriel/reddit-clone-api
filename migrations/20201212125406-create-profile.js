@@ -18,16 +18,13 @@ module.exports = {
           key: 'id'
         },
       },
-      postkarma: {
+      karma: {
         type: Sequelize.INTEGER
       },
       avatar: {
         type: Sequelize.STRING
       },
       age: {
-        type: Sequelize.INTEGER
-      },
-      commentkarma: {
         type: Sequelize.INTEGER
       },
       createdAt: {

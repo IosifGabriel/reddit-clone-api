@@ -15,7 +15,7 @@ module.exports = {
         media: faker.image.imageUrl(),
         title: faker.lorem.sentence(),
         body: faker.lorem.paragraph(),
-        upvotes: faker.random.number(9999),
+        upvotes: faker.random.number(100),
         createdAt: new Date(),
         updatedAt: new Date(),
       }

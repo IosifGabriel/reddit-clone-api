@@ -1,12 +1,13 @@
-const { GraphQLObjectType, GraphQLNonNull, GraphQLInt, GraphQLString } = require('graphql')
+const { GraphQLNonNull } = require('graphql')
 const models = require('../../models')
 
 const postType = require('../types/postType')
-const userProfileType = require('../types/userProfileType')
 const commentType = require('../types/commentType')
 
 const postInputType = require('../inputTypes/postInputType')
+const upvotePostInputType = require('../inputTypes/upvotePostInputType')
 const commentInputType = require('../inputTypes/commentInputType')
+const upvoteCommentInputType = require('../inputTypes/upvoteCommentInputType')
 
 module.exports = {
   createPost: {
@@ -22,6 +23,32 @@ module.exports = {
         throw new Error('not authenticated')
 
       const post = await user.createPost(input);
+      return post;
+    },
+  },
+  upvotePost: {
+    type: postType,
+    description: 'Upvote a post',
+    args: {
+      input: {
+        type: GraphQLNonNull(upvotePostInputType)
+      },
+    },
+    resolve: async (_, { input }, { user }) => {
+      if (!user)
+        throw new Error('not authenticated')
+
+      const post = await models.Post.findByPk(input.postId);
+      if (!post)
+        throw new Error('not found')
+
+      const voteValue = input.isPositive ? 1 : -1
+
+      await post.update({ upvotes: post.upvotes + voteValue })
+
+      const author = await post.getUser()
+      const authorProfile = await author.getProfile()
+      await authorProfile.update({ karma: authorProfile.karma + voteValue })
       return post;
     },
   },
@@ -43,61 +70,30 @@ module.exports = {
       return comment
     }
   },
-  upvotePost: {
-    type: userProfileType,
-    args: {
-      userId: {
-        type: GraphQLNonNull(GraphQLInt)
-      },
-    },
-    resolve: async (_, { userId }) => {
-      const profile = await models.Profile.findByPk(userId);
-      const numb = Number(profile.postkarma) + 1
-      profile.postkarma = numb
-      profile.save()
-      return profile;
-    },
-  },
   upvoteComment: {
-    type: userProfileType,
+    type: commentType,
+    description: 'Upvote a comment',
     args: {
-      userId: {
-        type: GraphQLNonNull(GraphQLInt)
+      input: {
+        type: GraphQLNonNull(upvoteCommentInputType)
       },
     },
-    resolve: async (_, { userId }) => {
-      const profile = await models.Profile.findByPk(userId);
-      profile.commentkarma = profile.commentkarma + 1
-      profile.save()
-      return profile;
-    },
-  },
-  downvotePost: {
-    type: userProfileType,
-    args: {
-      userId: {
-        type: GraphQLNonNull(GraphQLInt)
-      },
-    },
-    resolve: async (_, { userId }) => {
-      const profile = await models.Profile.findByPk(userId);
-      profile.postkarma = profile.postKarma - 1
-      profile.save()
-      return profile;
-    },
-  },
-  downvoteComment: {
-    type: userProfileType,
-    args: {
-      userId: {
-        type: GraphQLNonNull(GraphQLInt)
-      },
-    },
-    resolve: async (_, { userId }) => {
-      const profile = await models.Profile.findByPk(userId);
-      profile.commentkarma = profile.commentkarma - 1
-      profile.save()
-      return profile;
+    resolve: async (_, { input }, { user }) => {
+      if (!user)
+        throw new Error('not authenticated')
+
+      const comment = await models.Comment.findByPk(input.commentId);
+      if (!comment)
+        throw new Error('not found')
+
+      const voteValue = input.isPositive ? 1 : -1
+
+      await comment.update({ upvotes: comment.upvotes + voteValue })
+
+      const author = await comment.getUser() // TODO
+      const authorProfile = await author.getProfile()
+      await authorProfile.update({ karma: authorProfile.karma + voteValue })
+      return comment;
     }
   }
 }

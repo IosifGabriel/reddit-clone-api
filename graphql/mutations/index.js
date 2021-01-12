@@ -1,9 +1,9 @@
 const authMutations = require('./auth')
-const userMutations = require('./user')
+const accountMutations = require('./account')
 const postMutations = require('./post')
 
 module.exports = {
   ...authMutations,
-  ...userMutations,
+  ...accountMutations,
   ...postMutations
 }

@@ -8,19 +8,21 @@ module.exports = {
     type: GraphQLList(postType),
     description: 'Get a list of all posts',
     args: {
-      title: {
-        type: GraphQLString
-      },
+      title: { type: GraphQLString },
+      sort: { type: GraphQLString },
+      limit: { type: GraphQLInt },
+      offset: { type: GraphQLInt }
     },
-    resolve: async (_, { title = '' }) => {
-      const posts = await models.Post.findAll({
+    resolve: async (_, { title = '', sort = 'DESC', limit = 5, offset = 0 }) => {
+      const posts = await models.Post.findAndCountAll({
         where: {
-          title: {
-            [Op.like]: `%${title}%`
-          }
-        }
+          title: { [Op.like]: `%${title}%` }
+        },
+        order: [['createdAt', sort]],
+        limit,
+        offset
       })
-      return posts
+      return posts.rows
     }
   },
   post: {

@@ -20,8 +20,8 @@ module.exports = {
       }
     },
     resolve: async (_, { userId }) => {
-      const user = await models.User.findByPk(userId);
-      return user;
+      const user = await models.User.findByPk(userId)
+      return user
     }
   }
 }

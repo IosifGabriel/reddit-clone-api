@@ -1,7 +1,7 @@
 const { GraphQLObjectType, GraphQLInt, GraphQLString, GraphQLList } = require('graphql')
-const postType = require('./postType');
+const postType = require('./postType')
 
-const threadType = new GraphQLObjectType({
+module.exports = new GraphQLObjectType({
   name: 'Thread',
   fields: () => ({
     id: { type: GraphQLInt },
@@ -16,5 +16,3 @@ const threadType = new GraphQLObjectType({
     }
   })
 })
-
-module.exports = threadType

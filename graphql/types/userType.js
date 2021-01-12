@@ -1,8 +1,7 @@
-const { GraphQLObjectType, GraphQLInt, GraphQLString, GraphQLList } = require('graphql')
-const profileType = require('./userProfileType');
-const models = require('../../models')
+const { GraphQLObjectType, GraphQLInt, GraphQLString } = require('graphql')
+const profileType = require('./userProfileType')
 
-const userType = new GraphQLObjectType({
+module.exports = new GraphQLObjectType({
   name: 'User',
   fields: () => ({
     id: { type: GraphQLInt },
@@ -11,12 +10,10 @@ const userType = new GraphQLObjectType({
     profile: {
       type: profileType,
       resolve: async (parent) => {
-        return await parent.getProfile();
+        return await parent.getProfile()
       }
     },
     createdAt: { type: GraphQLString },
-    updatedAt: { type: GraphQLString },
+    updatedAt: { type: GraphQLString }
   })
 })
-
-module.exports = userType

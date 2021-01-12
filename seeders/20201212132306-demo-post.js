@@ -1,6 +1,6 @@
-'use strict';
-const models = require('../models');
-const faker = require('faker');
+'use strict'
+const models = require('../models')
+const faker = require('faker')
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -17,13 +17,12 @@ module.exports = {
         body: faker.lorem.paragraph(),
         upvotes: faker.random.number(100),
         createdAt: new Date(),
-        updatedAt: new Date(),
+        updatedAt: new Date()
       }
-    });
-    await queryInterface.bulkInsert('Posts', usersPosts, {});
+    })
+    await queryInterface.bulkInsert('Posts', usersPosts, {})
   },
-
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Posts', null, {});
+    await queryInterface.bulkDelete('Posts', null, {})
   }
-};
+}

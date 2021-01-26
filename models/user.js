@@ -1,14 +1,13 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+'use strict'
+const { Model } = require('sequelize')
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       models.User.hasOne(models.Profile, { foreignKey: 'userId' });
       models.User.hasMany(models.Post, { foreignKey: 'userId' });
     }
-  };
+  }
   User.init({
     username: DataTypes.STRING,
     password: DataTypes.STRING,
@@ -16,6 +15,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'User',
-  });
-  return User;
-};
+  })
+  return User
+}

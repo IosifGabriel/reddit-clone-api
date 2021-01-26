@@ -1,23 +1,21 @@
-'use strict';
-const models = require('../models');
-const faker = require('faker');
+'use strict'
+const models = require('../models')
+const faker = require('faker')
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    const usersQuery = await models.User.findAll();
+    const usersQuery = await models.User.findAll()
     const usersProfile = usersQuery.map(user => ({
       userId: user.id,
       avatar: faker.internet.avatar(),
-      postkarma: faker.random.number(9999),
-      commentkarma: faker.random.number(9999),
-      age: faker.random.number(99),
+      karma: faker.random.number(100),
+      age: faker.random.number(100),
       createdAt: new Date(),
-      updatedAt: new Date(),
-    }));
-    await queryInterface.bulkInsert('Profiles', usersProfile, {});
+      updatedAt: new Date()
+    }))
+    await queryInterface.bulkInsert('Profiles', usersProfile, {})
   },
-
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Profiles', null, {});
+    await queryInterface.bulkDelete('Profiles', null, {})
   }
 };
